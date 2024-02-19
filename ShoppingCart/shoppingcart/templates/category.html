@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+  {% if category %}
+      {{ category.desc|truncatewords:155 }}
+  {% else %}
+      welcome to Vogue Vista where everything around you...
+  {% endif %}
+{% endblock %}
+
+{% block title %}
+     {% if category %}
+      {{ category.name }} -VV store
+     {% else %}
+      Check our new collection -VV store
+     {% endif %}
+{% endblock %}
+
+{% block content %}
+     {% if category %}
+        <div>
+            <div class="row my_row">
+                <div class="mx-auto">
+                    <p><a href="{% url 'shoppingcart_app:AllProdCat' %}">Our Collections</a></p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="mx_auto" >
+        {% if category %}
+        <div class="d-flex justify-content-center">
+            <img class="my_img" src="{{ category.img.url }}" alt="{{ category.name }}" style="height:400px; width:auto; ">
+            </div>
+    </div>
+    <br>
+    <div>
+        <h1 class="text-center my_title">{{ category.name }}</h1>
+        <p class="text-justify">{{ category.desc }}</p>
+    </div>
+        {% else %}
+            <div>
+                <img class="my_img my_img_padding" src="{% static 'img/banner.jpg' %}" alt="Our Products" width="1250px;">
+            </div>
+            <br>
+            <div>
+                <h1 class="text-center my_title">Our Products Collections</h1>
+                <p class="text-justify">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.</p>
+            </div>
+        {% endif %}
+
+    <div class="container ">
+        <div class="row mx-auto">
+
+            {% for product in products.object_list %}
+                <div class="my_bottom_margin col-9 col_sm-12 col_md-4 col-lg-4 ">
+                    <div class="card text-center" style="min-width:18rem;">
+                        <a href="{{ product.get_url }}"><img class="card-img-top my_img" style="height:400px;" src="{{ product.img.url }}" alt="{{ product.name }}"></a>
+                    </div>
+                <div class="card-body">
+                        <h4>{{ product.name }}</h4>
+                        <p>{{ product.price }}</p>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+        <div class="mx-auto">
+            {% if products.paginator.num_pages > 1 %}
+
+
+            <br>
+            <div class="text-center">
+                {% for pg in products.paginator.page_range %}
+                    <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        <br>
+    </div>
+{% endblock %}
+
+
